@@ -10,6 +10,12 @@ Supported slots:
 - Flight Level (e.g., FL100)
 - QNH (e.g., 1013)
 - Squawk (e.g., 4521)
+- Sector (e.g., sector E)
+- Position (e.g., apron south)
+- Taxiway (e.g., taxiway B)
+- Holding point (e.g., holding point B, stop A1)
+- Wind (e.g., 030/5)
+- Time (e.g., airborne time 13)
 """
 from __future__ import annotations
 
@@ -178,10 +184,154 @@ def parse_squawk(tokens: List[Token]) -> Optional[ParsedSlot]:
     return None
 
 
+def _normalize_letter_token(token: Token) -> Optional[str]:
+    if token.kind == "nato":
+        return token.normalized
+    if token.normalized.isalnum() and len(token.normalized) <= 3:
+        return token.normalized.upper()
+    return None
+
+
+def parse_sector(tokens: List[Token]) -> Optional[ParsedSlot]:
+    for idx, token in enumerate(tokens):
+        if token.normalized in {"sector", "sektor"} and idx + 1 < len(tokens):
+            next_token = tokens[idx + 1]
+            letter = _normalize_letter_token(next_token)
+            if letter:
+                return ParsedSlot(
+                    name="sector",
+                    value=letter,
+                    confidence=next_token.confidence,
+                    raw_tokens=[token.raw, next_token.raw],
+                )
+    return None
+
+
+def parse_position(tokens: List[Token]) -> Optional[ParsedSlot]:
+    for idx, token in enumerate(tokens):
+        if token.normalized == "apron":
+            value = "apron"
+            raw_tokens = [token.raw]
+            confidence = token.confidence
+            if idx + 1 < len(tokens):
+                next_token = tokens[idx + 1]
+                if next_token.kind == "word":
+                    value = f"{value} {next_token.normalized}"
+                    raw_tokens.append(next_token.raw)
+                    confidence = min(confidence, next_token.confidence)
+            return ParsedSlot(name="position", value=value, confidence=confidence, raw_tokens=raw_tokens)
+    return None
+
+
+def parse_taxiway(tokens: List[Token]) -> Optional[ParsedSlot]:
+    for idx, token in enumerate(tokens):
+        if token.normalized == "taxiway" and idx + 1 < len(tokens):
+            next_token = tokens[idx + 1]
+            letter = _normalize_letter_token(next_token)
+            if letter:
+                return ParsedSlot(
+                    name="taxiway",
+                    value=letter,
+                    confidence=next_token.confidence,
+                    raw_tokens=[token.raw, next_token.raw],
+                )
+    return None
+
+
+def parse_holding_point(tokens: List[Token]) -> Optional[ParsedSlot]:
+    for idx, token in enumerate(tokens):
+        if token.normalized in {"holding", "hold"} and idx + 1 < len(tokens):
+            if tokens[idx + 1].normalized == "point" and idx + 2 < len(tokens):
+                candidate = tokens[idx + 2]
+                value = _normalize_letter_token(candidate)
+                if value:
+                    return ParsedSlot(
+                        name="holding_point",
+                        value=value,
+                        confidence=candidate.confidence,
+                        raw_tokens=[token.raw, tokens[idx + 1].raw, candidate.raw],
+                    )
+        if token.normalized == "stop" and idx + 1 < len(tokens):
+            candidate = tokens[idx + 1]
+            value = _normalize_letter_token(candidate)
+            if value:
+                return ParsedSlot(
+                    name="holding_point",
+                    value=value,
+                    confidence=candidate.confidence,
+                    raw_tokens=[token.raw, candidate.raw],
+                )
+    return None
+
+
+def parse_wind(tokens: List[Token]) -> Optional[ParsedSlot]:
+    for idx, token in enumerate(tokens):
+        if token.normalized != "wind":
+            continue
+        if idx + 1 >= len(tokens):
+            continue
+        direction = tokens[idx + 1]
+        if not direction.normalized.isdigit():
+            continue
+        speed: Optional[str] = None
+        speed_confidence = direction.confidence
+        if idx + 2 < len(tokens):
+            candidate = tokens[idx + 2]
+            if candidate.normalized.endswith("kt"):
+                speed = candidate.normalized.replace("kt", "")
+                speed_confidence = min(speed_confidence, candidate.confidence)
+            elif candidate.normalized.isdigit():
+                speed = candidate.normalized
+                speed_confidence = min(speed_confidence, candidate.confidence)
+                if idx + 3 < len(tokens) and tokens[idx + 3].normalized in {"kt", "kts"}:
+                    speed_confidence = min(speed_confidence, tokens[idx + 3].confidence)
+        if speed:
+            return ParsedSlot(
+                name="wind",
+                value=f"{direction.normalized}/{speed}",
+                confidence=speed_confidence,
+                raw_tokens=[token.raw, direction.raw],
+            )
+        return ParsedSlot(
+            name="wind",
+            value=f"{direction.normalized}",
+            confidence=direction.confidence,
+            raw_tokens=[token.raw, direction.raw],
+        )
+    return None
+
+
+def parse_time(tokens: List[Token]) -> Optional[ParsedSlot]:
+    for idx, token in enumerate(tokens):
+        if token.normalized == "time" and idx + 1 < len(tokens):
+            next_token = tokens[idx + 1]
+            if next_token.normalized.isdigit():
+                return ParsedSlot(
+                    name="time",
+                    value=next_token.normalized,
+                    confidence=next_token.confidence,
+                    raw_tokens=[token.raw, next_token.raw],
+                )
+    return None
+
+
 def parse_all(result: NormalizationResult) -> Dict[str, ParsedSlot]:
     """Parse all supported slots from a NormalizationResult."""
     slots: Dict[str, ParsedSlot] = {}
-    for parser in (parse_callsign, parse_runway, parse_altitude, parse_flight_level, parse_qnh, parse_squawk):
+    for parser in (
+        parse_callsign,
+        parse_runway,
+        parse_altitude,
+        parse_flight_level,
+        parse_qnh,
+        parse_squawk,
+        parse_sector,
+        parse_position,
+        parse_taxiway,
+        parse_holding_point,
+        parse_wind,
+        parse_time,
+    ):
         parsed = parser(result.tokens)
         if parsed:
             slots[parsed.name] = parsed
@@ -207,5 +357,26 @@ if __name__ == "__main__":
     slots = parse_all(result)
     assert slots["qnh"].value == "1013", slots
     assert slots["squawk"].value == "4521", slots
+
+    result = normalize_icao("Leave sector E at 3000 feet")
+    slots = parse_all(result)
+    assert slots["sector"].value == "E", slots
+
+    result = normalize_icao("Apron south request taxi")
+    slots = parse_all(result)
+    assert slots["position"].value == "apron south", slots
+
+    result = normalize_icao("Taxi to holding point B via taxiway B")
+    slots = parse_all(result)
+    assert slots["holding_point"].value == "B", slots
+    assert slots["taxiway"].value == "B", slots
+
+    result = normalize_icao("Wind 030 5kt")
+    slots = parse_all(result)
+    assert slots["wind"].value == "030/5", slots
+
+    result = normalize_icao("Airborne time 13")
+    slots = parse_all(result)
+    assert slots["time"].value == "13", slots
 
     print("Parser self-tests passed.")
