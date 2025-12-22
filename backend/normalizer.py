@@ -219,6 +219,6 @@ if __name__ == "__main__":
     assert result.normalized_text == "3 5 9", result
 
     result = normalize_icao("climb to flight level one zero zero")
-    assert result.normalized_text == "climb 2 FL100", result
+    assert result.normalized_text == "climb to FL100", result
 
     print("Normalizer self-tests passed.")

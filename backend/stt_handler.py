@@ -32,8 +32,10 @@ from __future__ import annotations
 
 from typing import Any, Mapping
 
+from backend.atc_response import build_atc_response
 from backend.normalizer import normalize_icao
 from backend.parsers import parse_all
+from backend.state_machine import advance_state
 from backend.validator import validate
 
 
@@ -42,6 +44,7 @@ def handle_stt(
     state: str,
     *,
     current_slots: Mapping[str, Any] | None = None,
+    scenario: str = "graz_vfr_sector_e",
 ) -> dict[str, Any]:
     """Process STT output into normalized text, parsed slots, and validation.
 
@@ -62,7 +65,19 @@ def handle_stt(
     merged_slots = dict(current_slots or {})
     merged_slots.update(slot_values)
 
-    validation = validate(state, merged_slots, normalized_text=normalization.normalized_text)
+    validation = validate(
+        state,
+        merged_slots,
+        normalized_text=normalization.normalized_text,
+        scenario=scenario,
+    )
+    next_state = advance_state(state, validation, scenario=scenario)
+    atc_response = build_atc_response(
+        state,
+        scenario=scenario,
+        slots=merged_slots,
+        validation=validation,
+    )
 
     return {
         "text": stt_text,
@@ -86,4 +101,10 @@ def handle_stt(
             for name, slot in parsed_slots.items()
         },
         "validation": validation,
+        "next_state": next_state,
+        "atc_response": {
+            "text": atc_response.text,
+            "reason": atc_response.reason,
+            "renderer": atc_response.renderer,
+        },
     }
