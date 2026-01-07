@@ -1,282 +1,165 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ICAO VFR Trainer</title>
+    <title>ICAO Phonetic Trainer</title>
     <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0b1020;
+        --card: #141a2e;
+        --accent: #6ea8fe;
+        --text: #f4f6fb;
+        --muted: #b9c2dc;
+      }
+      * {
+        box-sizing: border-box;
+      }
       body {
-        font-family: system-ui, sans-serif;
-        margin: 2rem;
-        background: #0b1020;
-        color: #f4f6fb;
+        font-family: "Inter", system-ui, sans-serif;
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
       }
-      .panel {
-        background: #151b2e;
+      header {
+        padding: 4rem 1.5rem 2rem;
+        text-align: center;
+      }
+      header h1 {
+        font-size: clamp(2rem, 4vw, 3rem);
+        margin-bottom: 0.5rem;
+      }
+      header p {
+        color: var(--muted);
+        max-width: 680px;
+        margin: 0 auto;
+      }
+      main {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 0 1.5rem 4rem;
+        display: grid;
+        gap: 1.5rem;
+      }
+      .card {
+        background: var(--card);
         padding: 1.5rem;
-        border-radius: 12px;
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-        max-width: 900px;
+        border-radius: 16px;
+        box-shadow: 0 18px 32px rgba(0, 0, 0, 0.35);
       }
-      .row {
-        display: flex;
+      .grid {
+        display: grid;
         gap: 1rem;
-        flex-wrap: wrap;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       }
-      label {
-        display: block;
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 999px;
+        background: rgba(110, 168, 254, 0.15);
+        color: var(--accent);
         font-weight: 600;
-        margin-bottom: 0.35rem;
+        font-size: 0.9rem;
       }
-      input,
-      textarea,
-      select {
-        width: 100%;
-        padding: 0.6rem;
-        border-radius: 8px;
-        border: 1px solid #2b3352;
-        background: #0f1528;
-        color: #f4f6fb;
+      ul {
+        padding-left: 1.2rem;
+        color: var(--muted);
       }
-      button {
-        padding: 0.6rem 1.2rem;
-        border-radius: 8px;
+      .cta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+      }
+      .cta button {
         border: none;
-        background: #3f6ad8;
-        color: #fff;
+        border-radius: 10px;
+        padding: 0.75rem 1.5rem;
         font-weight: 600;
         cursor: pointer;
+        background: var(--accent);
+        color: #081028;
       }
-      button:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
+      .cta button.secondary {
+        background: transparent;
+        border: 1px solid var(--accent);
+        color: var(--accent);
       }
-      pre {
-        background: #0f1528;
-        padding: 1rem;
-        border-radius: 8px;
-        overflow-x: auto;
-      }
-      .muted {
-        color: #b5bfdc;
-      }
-      .status {
-        margin-top: 0.75rem;
-        color: #ffd479;
-      }
-      .log {
-        margin-top: 1rem;
-        padding: 1rem;
-        background: #0f1528;
-        border-radius: 8px;
-        min-height: 120px;
-      }
-      .log-entry {
-        margin-bottom: 0.75rem;
-      }
-      .log-entry span {
-        font-weight: 600;
-      }
-      .log-entry.atc span {
-        color: #7dd3fc;
-      }
-      .log-entry.pilot span {
-        color: #fca5a5;
+      footer {
+        text-align: center;
+        padding: 2rem 1rem 3rem;
+        color: var(--muted);
+        font-size: 0.9rem;
       }
     </style>
   </head>
   <body>
-    <div class="panel">
-      <h1>ICAO VFR Trainer (Demo)</h1>
-      <p class="muted">
-        Voice-first UI scaffold. Record audio or enter a transcript to exercise
-        the normalizer, parser, validator, and state machine.
+    <header>
+      <span class="pill">ICAO Phonetic Trainer</span>
+      <h1>Trainiere das Alphabet wie im Cockpit</h1>
+      <p>
+        Die App spielt ICAO-Codewörter wie „Delta, Echo, Papa“ ab – du tippst
+        die passenden Buchstaben in Echtzeit. Tempo und ATC-Rauschen steigen im
+        Highscore-Modus automatisch.
       </p>
+    </header>
 
-      <div class="row">
-        <div style="flex: 1 1 240px">
-          <label for="state">State</label>
-          <select id="state">
-            <option value="initial_call">initial_call</option>
-            <option value="taxi_request">taxi_request</option>
-            <option value="taxi_clearance">taxi_clearance</option>
-            <option value="intermediate_hold">intermediate_hold</option>
-            <option value="taxi_continue">taxi_continue</option>
-            <option value="departure_instructions">departure_instructions</option>
-            <option value="lineup_wait">lineup_wait</option>
-            <option value="takeoff_clearance">takeoff_clearance</option>
-            <option value="airborne_time">airborne_time</option>
-            <option value="qnh_update">qnh_update</option>
-            <option value="leave_sector">leave_sector</option>
-            <option value="frequency_change">frequency_change</option>
-          </select>
+    <main>
+      <section class="card">
+        <h2>Was die App macht</h2>
+        <div class="grid">
+          <div>
+            <h3>Training</h3>
+            <p class="muted">
+              Buchstaben-Grid von A–Z, gesprochene Sequenzen, sofortiges
+              Feedback.
+            </p>
+          </div>
+          <div>
+            <h3>Highscore</h3>
+            <p class="muted">
+              Mit jeder Runde steigt die Sprechgeschwindigkeit und das ATC-
+              Rauschen. Perfekt für den Fokus-Drill.
+            </p>
+          </div>
+          <div>
+            <h3>Offline</h3>
+            <p class="muted">
+              Kein Backend nötig – lokale iOS-Text-to-Speech und Noise-Engine.
+            </p>
+          </div>
         </div>
-        <div style="flex: 1 1 240px">
-          <label for="scenario">Scenario</label>
-          <input id="scenario" value="graz_vfr_sector_e" />
+      </section>
+
+      <section class="card">
+        <h2>Geplanter Funktionsumfang</h2>
+        <ul>
+          <li>Practice- und Highscore-Modus</li>
+          <li>Variable Geschwindigkeit &amp; Störsignal-Intensität</li>
+          <li>Lokale Highscore-Speicherung</li>
+          <li>Mehrere Schwierigkeitsprofile</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Nächste Schritte</h2>
+        <p class="muted">
+          Das hier ist die Startseite für GitHub Pages. Sobald wir das iOS-
+          Projekt finalisiert haben, können wir hier Downloads, Screenshots und
+          eine Demo ergänzen.
+        </p>
+        <div class="cta">
+          <button>Projektstatus anfragen</button>
+          <button class="secondary">GitHub Pages später aktivieren</button>
         </div>
-      </div>
+      </section>
+    </main>
 
-      <div style="margin-top: 1rem">
-        <label for="text">Transcript</label>
-        <textarea
-          id="text"
-          rows="4"
-          placeholder="Graz Tower, OE-CRD, apron south, information Q received, request taxi"
-        ></textarea>
-      </div>
-
-      <div class="row" style="margin-top: 1rem">
-        <button id="record">Start Recording</button>
-        <button id="stop" disabled>Stop Recording</button>
-        <button id="send">Send Transcript</button>
-        <button id="send-audio" disabled>Send Audio</button>
-        <button id="clear">Clear</button>
-      </div>
-
-      <div class="status" id="status"></div>
-
-      <h3>Response</h3>
-      <pre id="output">{}</pre>
-
-      <h3>Conversation</h3>
-      <div id="log" class="log"></div>
-    </div>
-
-    <script>
-      const sendButton = document.getElementById("send");
-      const sendAudioButton = document.getElementById("send-audio");
-      const clearButton = document.getElementById("clear");
-      const recordButton = document.getElementById("record");
-      const stopButton = document.getElementById("stop");
-      const output = document.getElementById("output");
-      const status = document.getElementById("status");
-      const log = document.getElementById("log");
-      let mediaRecorder = null;
-      let audioChunks = [];
-
-      function appendLog(role, text) {
-        const entry = document.createElement("div");
-        entry.className = `log-entry ${role}`;
-        entry.innerHTML = `<span>${role.toUpperCase()}:</span> ${text}`;
-        log.appendChild(entry);
-      }
-
-      function updateState(nextState) {
-        const stateSelect = document.getElementById("state");
-        if (nextState && stateSelect.value !== nextState) {
-          stateSelect.value = nextState;
-        }
-      }
-
-      async function sendPayload() {
-        status.textContent = "Sending...";
-        const payload = {
-          text: document.getElementById("text").value,
-          state: document.getElementById("state").value,
-          scenario: document.getElementById("scenario").value,
-        };
-
-        try {
-          const response = await fetch("/stt", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-          });
-          const data = await response.json();
-          output.textContent = JSON.stringify(data, null, 2);
-          if (payload.text.trim()) {
-            appendLog("pilot", payload.text.trim());
-          }
-          if (data.atc_response?.text) {
-            appendLog("atc", data.atc_response.text);
-          }
-          updateState(data.next_state);
-          status.textContent = response.ok
-            ? "OK"
-            : `Error ${response.status}: ${data.detail || "unknown"}`;
-        } catch (error) {
-          status.textContent = `Request failed: ${error}`;
-        }
-      }
-
-      async function sendAudio() {
-        if (audioChunks.length === 0) {
-          status.textContent = "No audio recorded yet.";
-          return;
-        }
-        status.textContent = "Uploading audio...";
-        const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
-        const formData = new FormData();
-        formData.append("audio", audioBlob, "recording.webm");
-        formData.append("state", document.getElementById("state").value);
-        formData.append("scenario", document.getElementById("scenario").value);
-
-        try {
-          const response = await fetch("/stt/audio", {
-            method: "POST",
-            body: formData,
-          });
-          const data = await response.json();
-          output.textContent = JSON.stringify(data, null, 2);
-          if (data.text) {
-            appendLog("pilot", data.text);
-          }
-          if (data.atc_response?.text) {
-            appendLog("atc", data.atc_response.text);
-          }
-          updateState(data.next_state);
-          status.textContent = response.ok
-            ? "OK"
-            : `Error ${response.status}: ${data.detail || "unknown"}`;
-        } catch (error) {
-          status.textContent = `Upload failed: ${error}`;
-        }
-      }
-
-      async function startRecording() {
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          mediaRecorder = new MediaRecorder(stream);
-          audioChunks = [];
-          mediaRecorder.ondataavailable = (event) => {
-            if (event.data.size > 0) {
-              audioChunks.push(event.data);
-            }
-          };
-          mediaRecorder.onstop = () => {
-            sendAudioButton.disabled = audioChunks.length === 0;
-            status.textContent = "Recording stopped.";
-          };
-          mediaRecorder.start();
-          recordButton.disabled = true;
-          stopButton.disabled = false;
-          status.textContent = "Recording...";
-        } catch (error) {
-          status.textContent = `Microphone error: ${error}`;
-        }
-      }
-
-      function stopRecording() {
-        if (mediaRecorder && mediaRecorder.state !== "inactive") {
-          mediaRecorder.stop();
-          recordButton.disabled = false;
-          stopButton.disabled = true;
-        }
-      }
-
-      sendButton.addEventListener("click", sendPayload);
-      sendAudioButton.addEventListener("click", sendAudio);
-      recordButton.addEventListener("click", startRecording);
-      stopButton.addEventListener("click", stopRecording);
-      clearButton.addEventListener("click", () => {
-        document.getElementById("text").value = "";
-        output.textContent = "{}";
-        status.textContent = "";
-        audioChunks = [];
-        sendAudioButton.disabled = true;
-        log.innerHTML = "";
-      });
-    </script>
+    <footer>
+      © 2024 ICAO Phonetic Trainer · Built for fast callouts
+    </footer>
   </body>
 </html>

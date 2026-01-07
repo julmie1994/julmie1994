@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ICAO Phonetic Trainer</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0b1020;
+        --panel: #141a2e;
+        --panel-2: #11172b;
+        --accent: #6ea8fe;
+        --accent-2: #fbbf24;
+        --text: #f4f6fb;
+        --muted: #b9c2dc;
+        --success: #34d399;
+        --danger: #f87171;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+      header {
+        padding: 3rem 1.5rem 2rem;
+        text-align: center;
+      }
+      header h1 {
+        margin: 0.5rem 0 0;
+        font-size: clamp(2rem, 4vw, 3rem);
+      }
+      header p {
+        max-width: 720px;
+        margin: 0.75rem auto 0;
+        color: var(--muted);
+      }
+      main {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 1.5rem 4rem;
+        display: grid;
+        gap: 1.5rem;
+      }
+      .panel {
+        background: var(--panel);
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 18px 32px rgba(0, 0, 0, 0.35);
+      }
+      .grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      }
+      .status-row {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 999px;
+        background: rgba(110, 168, 254, 0.15);
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+      .stat {
+        background: var(--panel-2);
+        padding: 0.75rem 1rem;
+        border-radius: 12px;
+      }
+      .stat span {
+        display: block;
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+      .stat strong {
+        font-size: 1.4rem;
+      }
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+      button {
+        border: none;
+        border-radius: 10px;
+        padding: 0.65rem 1.25rem;
+        font-weight: 600;
+        cursor: pointer;
+        background: var(--accent);
+        color: #081028;
+      }
+      button.secondary {
+        background: transparent;
+        border: 1px solid var(--accent);
+        color: var(--accent);
+      }
+      button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .letters {
+        display: grid;
+        gap: 0.5rem;
+        grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));
+      }
+      .letter-btn {
+        background: var(--panel-2);
+        color: var(--text);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 0.6rem 0;
+        border-radius: 10px;
+        font-size: 1rem;
+      }
+      .letter-btn.correct {
+        border-color: var(--success);
+        box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.3);
+      }
+      .letter-btn.wrong {
+        border-color: var(--danger);
+        box-shadow: 0 0 0 2px rgba(248, 113, 113, 0.3);
+      }
+      .muted {
+        color: var(--muted);
+      }
+      label {
+        display: block;
+        margin-bottom: 0.35rem;
+        font-weight: 600;
+      }
+      input[type="range"] {
+        width: 100%;
+      }
+      footer {
+        text-align: center;
+        color: var(--muted);
+        padding: 2rem 1rem 3rem;
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <span class="pill">ICAO Phonetic Trainer</span>
+      <h1>Phonetic Alphabet Drill</h1>
+      <p>
+        Demo für den späteren iOS‑Trainer: Wir spielen ICAO‑Codewörter ab und du
+        klickst die passenden Buchstaben. Highscore‑Modus steigert Tempo und
+        Rauschen automatisch.
+      </p>
+    </header>
+
+    <main>
+      <section class="panel">
+        <h2>Session</h2>
+        <div class="status-row">
+          <div class="stat">
+            <span>Score</span>
+            <strong id="score">0</strong>
+          </div>
+          <div class="stat">
+            <span>Highscore</span>
+            <strong id="highscore">0</strong>
+          </div>
+          <div class="stat">
+            <span>Tempo</span>
+            <strong id="tempo">0.40</strong>
+          </div>
+          <div class="stat">
+            <span>Noise</span>
+            <strong id="noise">0.00</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Steuerung</h2>
+        <div class="controls">
+          <button id="start">Start</button>
+          <button id="replay" class="secondary" disabled>Replay</button>
+          <button id="stop" class="secondary" disabled>Stop</button>
+        </div>
+        <p id="status" class="muted" style="margin-top: 1rem">Bereit.</p>
+      </section>
+
+      <section class="panel">
+        <h2>Buchstaben</h2>
+        <div id="letters" class="letters"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Settings</h2>
+        <div class="grid">
+          <div>
+            <label for="mode">Modus</label>
+            <select id="mode">
+              <option value="practice">Practice</option>
+              <option value="highscore">Highscore</option>
+            </select>
+          </div>
+          <div>
+            <label for="speed">Starttempo</label>
+            <input id="speed" type="range" min="0.2" max="0.6" step="0.02" value="0.4" />
+            <div class="muted" id="speedLabel">0.40</div>
+          </div>
+          <div>
+            <label for="noiseLevel">Start‑Noise</label>
+            <input id="noiseLevel" type="range" min="0" max="0.8" step="0.05" value="0" />
+            <div class="muted" id="noiseLabel">0.00</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>© 2024 ICAO Phonetic Trainer · Web‑Demo</footer>
+
+    <script>
+      const alphabet = [
+        { letter: "A", word: "Alpha" },
+        { letter: "B", word: "Bravo" },
+        { letter: "C", word: "Charlie" },
+        { letter: "D", word: "Delta" },
+        { letter: "E", word: "Echo" },
+        { letter: "F", word: "Foxtrot" },
+        { letter: "G", word: "Golf" },
+        { letter: "H", word: "Hotel" },
+        { letter: "I", word: "India" },
+        { letter: "J", word: "Juliett" },
+        { letter: "K", word: "Kilo" },
+        { letter: "L", word: "Lima" },
+        { letter: "M", word: "Mike" },
+        { letter: "N", word: "November" },
+        { letter: "O", word: "Oscar" },
+        { letter: "P", word: "Papa" },
+        { letter: "Q", word: "Quebec" },
+        { letter: "R", word: "Romeo" },
+        { letter: "S", word: "Sierra" },
+        { letter: "T", word: "Tango" },
+        { letter: "U", word: "Uniform" },
+        { letter: "V", word: "Victor" },
+        { letter: "W", word: "Whiskey" },
+        { letter: "X", word: "X-ray" },
+        { letter: "Y", word: "Yankee" },
+        { letter: "Z", word: "Zulu" },
+      ];
+
+      const lettersEl = document.getElementById("letters");
+      const scoreEl = document.getElementById("score");
+      const highscoreEl = document.getElementById("highscore");
+      const tempoEl = document.getElementById("tempo");
+      const noiseEl = document.getElementById("noise");
+      const statusEl = document.getElementById("status");
+      const startBtn = document.getElementById("start");
+      const replayBtn = document.getElementById("replay");
+      const stopBtn = document.getElementById("stop");
+      const modeSelect = document.getElementById("mode");
+      const speedInput = document.getElementById("speed");
+      const noiseInput = document.getElementById("noiseLevel");
+      const speedLabel = document.getElementById("speedLabel");
+      const noiseLabel = document.getElementById("noiseLabel");
+
+      let sequence = [];
+      let index = 0;
+      let score = 0;
+      let highscore = 0;
+      let activeRate = parseFloat(speedInput.value);
+      let activeNoise = parseFloat(noiseInput.value);
+      let phase = "idle";
+      let synth = window.speechSynthesis;
+
+      function renderLetters() {
+        lettersEl.innerHTML = "";
+        alphabet.forEach((entry) => {
+          const btn = document.createElement("button");
+          btn.className = "letter-btn";
+          btn.textContent = entry.letter;
+          btn.disabled = true;
+          btn.addEventListener("click", () => handleGuess(entry.letter, btn));
+          lettersEl.appendChild(btn);
+        });
+      }
+
+      function updateStats() {
+        scoreEl.textContent = score;
+        highscoreEl.textContent = highscore;
+        tempoEl.textContent = activeRate.toFixed(2);
+        noiseEl.textContent = activeNoise.toFixed(2);
+      }
+
+      function setPhase(nextPhase) {
+        phase = nextPhase;
+        const isActive = phase === "awaiting";
+        document.querySelectorAll(".letter-btn").forEach((btn) => {
+          btn.disabled = !isActive;
+          btn.classList.remove("correct", "wrong");
+        });
+        replayBtn.disabled = phase !== "awaiting";
+        stopBtn.disabled = phase === "idle";
+      }
+
+      function randomSequence(length) {
+        return Array.from({ length }, () => alphabet[Math.floor(Math.random() * alphabet.length)]);
+      }
+
+      function playSequence() {
+        if (!synth) {
+          statusEl.textContent = "Text-to-Speech nicht verfügbar.";
+          return;
+        }
+        setPhase("playing");
+        statusEl.textContent = "Höre zu …";
+        let delay = 0;
+        sequence.forEach((entry) => {
+          const utterance = new SpeechSynthesisUtterance(entry.word);
+          utterance.lang = "en-US";
+          utterance.rate = activeRate;
+          setTimeout(() => synth.speak(utterance), delay);
+          delay += 700;
+        });
+        setTimeout(() => {
+          setPhase("awaiting");
+          statusEl.textContent = "Tippe die Buchstaben.";
+        }, delay + 200);
+      }
+
+      function nextRound() {
+        sequence = randomSequence(3 + Math.min(score, 4));
+        index = 0;
+        playSequence();
+      }
+
+      function handleGuess(letter, btn) {
+        if (phase !== "awaiting") return;
+        const expected = sequence[index].letter;
+        if (letter === expected) {
+          btn.classList.add("correct");
+          index += 1;
+          if (index >= sequence.length) {
+            score += 1;
+            if (score > highscore) {
+              highscore = score;
+            }
+            if (modeSelect.value === "highscore") {
+              activeRate = Math.min(activeRate + 0.02, 0.6);
+              activeNoise = Math.min(activeNoise + 0.05, 0.8);
+            }
+            updateStats();
+            nextRound();
+          }
+        } else {
+          btn.classList.add("wrong");
+          statusEl.textContent = `Falsch: erwartet ${expected}.`;
+          setPhase("idle");
+        }
+      }
+
+      function start() {
+        score = 0;
+        activeRate = parseFloat(speedInput.value);
+        activeNoise = parseFloat(noiseInput.value);
+        updateStats();
+        nextRound();
+      }
+
+      function stop() {
+        synth?.cancel();
+        setPhase("idle");
+        statusEl.textContent = "Gestoppt.";
+      }
+
+      speedInput.addEventListener("input", () => {
+        speedLabel.textContent = parseFloat(speedInput.value).toFixed(2);
+      });
+      noiseInput.addEventListener("input", () => {
+        noiseLabel.textContent = parseFloat(noiseInput.value).toFixed(2);
+      });
+
+      startBtn.addEventListener("click", start);
+      replayBtn.addEventListener("click", playSequence);
+      stopBtn.addEventListener("click", stop);
+
+      renderLetters();
+      updateStats();
+      setPhase("idle");
+    </script>
+  </body>
+</html>
