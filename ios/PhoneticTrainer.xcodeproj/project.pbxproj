@@ -1,0 +1,349 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A1B2C3D4E5F6000000000001 /* PhoneticTrainerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000010 /* PhoneticTrainerApp.swift */; };
+		A1B2C3D4E5F6000000000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000011 /* ContentView.swift */; };
+		A1B2C3D4E5F6000000000003 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000012 /* SettingsView.swift */; };
+		A1B2C3D4E5F6000000000004 /* GameEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000013 /* GameEngine.swift */; };
+		A1B2C3D4E5F6000000000005 /* SpeechService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000014 /* SpeechService.swift */; };
+		A1B2C3D4E5F6000000000006 /* NoiseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000015 /* NoiseService.swift */; };
+		A1B2C3D4E5F6000000000007 /* PhoneticEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000016 /* PhoneticEntry.swift */; };
+		A1B2C3D4E5F6000000000008 /* GameEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000017 /* GameEngineTests.swift */; };
+		A1B2C3D4E5F6000000000009 /* PhoneticTrainerTests in Frameworks */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000025 /* PhoneticTrainer.app */; };
+		A1B2C3D4E5F600000000000A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000019 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A1B2C3D4E5F6000000000021 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A1B2C3D4E5F6000000000030 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A1B2C3D4E5F6000000000020;
+			remoteInfo = PhoneticTrainer;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A1B2C3D4E5F6000000000022 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1B2C3D4E5F6000000000009 /* PhoneticTrainerTests in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A1B2C3D4E5F6000000000031 /* PhoneticTrainer */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F6000000000032 /* PhoneticTrainer */,
+				A1B2C3D4E5F6000000000033 /* PhoneticTrainerTests */,
+			);
+			sourceTree = "<group>";
+		};
+		A1B2C3D4E5F6000000000032 /* PhoneticTrainer */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F6000000000010 /* PhoneticTrainerApp.swift */,
+				A1B2C3D4E5F6000000000060 /* Models */,
+				A1B2C3D4E5F6000000000061 /* Services */,
+				A1B2C3D4E5F6000000000062 /* Views */,
+				A1B2C3D4E5F6000000000019 /* Assets.xcassets */,
+				A1B2C3D4E5F6000000000018 /* Info.plist */,
+			);
+			path = PhoneticTrainer;
+			sourceTree = "<group>";
+		};
+		A1B2C3D4E5F6000000000060 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F6000000000016 /* PhoneticEntry.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A1B2C3D4E5F6000000000061 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F6000000000013 /* GameEngine.swift */,
+				A1B2C3D4E5F6000000000014 /* SpeechService.swift */,
+				A1B2C3D4E5F6000000000015 /* NoiseService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A1B2C3D4E5F6000000000062 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F6000000000011 /* ContentView.swift */,
+				A1B2C3D4E5F6000000000012 /* SettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A1B2C3D4E5F6000000000033 /* PhoneticTrainerTests */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F6000000000017 /* GameEngineTests.swift */,
+			);
+			path = PhoneticTrainerTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A1B2C3D4E5F6000000000020 /* PhoneticTrainer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1B2C3D4E5F6000000000040 /* Build configuration list for PBXNativeTarget "PhoneticTrainer" */;
+			buildPhases = (
+				A1B2C3D4E5F6000000000023 /* Sources */,
+				A1B2C3D4E5F6000000000024 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PhoneticTrainer;
+			productName = PhoneticTrainer;
+			productReference = A1B2C3D4E5F6000000000025 /* PhoneticTrainer.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A1B2C3D4E5F6000000000026 /* PhoneticTrainerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1B2C3D4E5F6000000000043 /* Build configuration list for PBXNativeTarget "PhoneticTrainerTests" */;
+			buildPhases = (
+				A1B2C3D4E5F6000000000027 /* Sources */,
+				A1B2C3D4E5F6000000000022 /* Frameworks */,
+				A1B2C3D4E5F6000000000028 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A1B2C3D4E5F6000000000029 /* PBXTargetDependency */,
+			);
+			name = PhoneticTrainerTests;
+			productName = PhoneticTrainerTests;
+			productReference = A1B2C3D4E5F600000000002A /* PhoneticTrainerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A1B2C3D4E5F6000000000030 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					A1B2C3D4E5F6000000000020 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					A1B2C3D4E5F6000000000026 = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = A1B2C3D4E5F6000000000020;
+					};
+				};
+			};
+			buildConfigurationList = A1B2C3D4E5F6000000000046 /* Build configuration list for PBXProject "PhoneticTrainer" */;
+			compatibilityVersion = "Xcode 15.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			mainGroup = A1B2C3D4E5F6000000000031;
+			productRefGroup = A1B2C3D4E5F6000000000031;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A1B2C3D4E5F6000000000020 /* PhoneticTrainer */,
+				A1B2C3D4E5F6000000000026 /* PhoneticTrainerTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A1B2C3D4E5F6000000000024 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1B2C3D4E5F600000000000A /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1B2C3D4E5F6000000000028 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A1B2C3D4E5F6000000000023 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1B2C3D4E5F6000000000001 /* PhoneticTrainerApp.swift in Sources */,
+				A1B2C3D4E5F6000000000002 /* ContentView.swift in Sources */,
+				A1B2C3D4E5F6000000000003 /* SettingsView.swift in Sources */,
+				A1B2C3D4E5F6000000000004 /* GameEngine.swift in Sources */,
+				A1B2C3D4E5F6000000000005 /* SpeechService.swift in Sources */,
+				A1B2C3D4E5F6000000000006 /* NoiseService.swift in Sources */,
+				A1B2C3D4E5F6000000000007 /* PhoneticEntry.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1B2C3D4E5F6000000000027 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1B2C3D4E5F6000000000008 /* GameEngineTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A1B2C3D4E5F6000000000029 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A1B2C3D4E5F6000000000020 /* PhoneticTrainer */;
+			targetProxy = A1B2C3D4E5F6000000000021 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXFileReference section */
+		A1B2C3D4E5F6000000000010 /* PhoneticTrainerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneticTrainerApp.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000011 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/ContentView.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000012 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/SettingsView.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000013 /* GameEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/GameEngine.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000014 /* SpeechService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/SpeechService.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000015 /* NoiseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/NoiseService.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000016 /* PhoneticEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/PhoneticEntry.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000017 /* GameEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameEngineTests.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000018 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000019 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000025 /* PhoneticTrainer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = PhoneticTrainer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1B2C3D4E5F600000000002A /* PhoneticTrainerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = PhoneticTrainerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXBuildConfiguration section */
+		A1B2C3D4E5F6000000000041 /* Debug */ = {
+			isa = PBXBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = PhoneticTrainer/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.PhoneticTrainer;
+				PRODUCT_NAME = PhoneticTrainer;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		A1B2C3D4E5F6000000000042 /* Release */ = {
+			isa = PBXBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = PhoneticTrainer/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.PhoneticTrainer;
+				PRODUCT_NAME = PhoneticTrainer;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		A1B2C3D4E5F6000000000044 /* Debug */ = {
+			isa = PBXBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				INFOPLIST_FILE = "";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.PhoneticTrainerTests;
+				PRODUCT_NAME = PhoneticTrainerTests;
+				SDKROOT = iphonesimulator;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PhoneticTrainer.app/PhoneticTrainer";
+			};
+			name = Debug;
+		};
+		A1B2C3D4E5F6000000000045 /* Release */ = {
+			isa = PBXBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				INFOPLIST_FILE = "";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.PhoneticTrainerTests;
+				PRODUCT_NAME = PhoneticTrainerTests;
+				SDKROOT = iphonesimulator;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PhoneticTrainer.app/PhoneticTrainer";
+			};
+			name = Release;
+		};
+		A1B2C3D4E5F6000000000047 /* Debug */ = {
+			isa = PBXBuildConfiguration;
+			buildSettings = {
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A1B2C3D4E5F6000000000048 /* Release */ = {
+			isa = PBXBuildConfiguration;
+			buildSettings = {
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End PBXBuildConfiguration section */
+
+/* Begin PBXBuildConfigurationList section */
+		A1B2C3D4E5F6000000000040 /* Build configuration list for PBXNativeTarget "PhoneticTrainer" */ = {
+			isa = PBXBuildConfigurationList;
+			buildConfigurations = (
+				A1B2C3D4E5F6000000000041 /* Debug */,
+				A1B2C3D4E5F6000000000042 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A1B2C3D4E5F6000000000043 /* Build configuration list for PBXNativeTarget "PhoneticTrainerTests" */ = {
+			isa = PBXBuildConfigurationList;
+			buildConfigurations = (
+				A1B2C3D4E5F6000000000044 /* Debug */,
+				A1B2C3D4E5F6000000000045 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A1B2C3D4E5F6000000000046 /* Build configuration list for PBXProject "PhoneticTrainer" */ = {
+			isa = PBXBuildConfigurationList;
+			buildConfigurations = (
+				A1B2C3D4E5F6000000000047 /* Debug */,
+				A1B2C3D4E5F6000000000048 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End PBXBuildConfigurationList section */
+	};
+	rootObject = A1B2C3D4E5F6000000000030 /* Project object */;
+}
