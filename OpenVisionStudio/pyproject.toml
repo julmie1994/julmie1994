@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openvisionstudio"
+version = "0.1.0"
+description = "Open-source node-based computer vision pipeline IDE for Windows."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "OpenVisionStudio Contributors" }]
+dependencies = [
+  "PySide6>=6.6.0",
+  "opencv-python>=4.8.0",
+  "numpy>=1.24.0",
+  "NodeGraphQt>=0.6.30",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.4.0",
+  "pytest-qt>=4.2.0",
+  "pyinstaller>=6.0.0",
+]
+
+[project.scripts]
+openvisionstudio = "openvisionstudio.app:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

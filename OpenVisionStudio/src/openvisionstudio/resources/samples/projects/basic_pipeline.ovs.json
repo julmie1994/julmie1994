@@ -1,0 +1,11 @@
+{
+  "app_version": "0.1.0",
+  "schema_version": 1,
+  "nodes": [
+    {"id": "n1", "type": "Builtin.ImageLoad", "params": {"path": "sample.png"}, "position": [0, 0]},
+    {"id": "n2", "type": "Builtin.Canny", "params": {"low": 50, "high": 150}, "position": [250, 0]}
+  ],
+  "connections": [
+    {"src_node": "n1", "src_port": "image", "dst_node": "n2", "dst_port": "image"}
+  ]
+}
